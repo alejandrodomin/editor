@@ -7,29 +7,51 @@ var RIGHT_ARROW = "\x1b[C"
 var LEFT_ARROW = "\x1b[D"
 
 
-def main():
-    file: String = loadFile("test.txt")
+fn main():
+    file: List[UInt8] = loadFile("test.txt").or_else([])
 
     while True:
         print("\033[2J\033[H")  # Clear screen
 
-        input_char = input(file)
-        if input_char == "quit":
-            break
-        elif input_char == "save":
-            saveFile(file)
+        try:
+            input_str = input(">")
+            if input_str == "quit":
+                break
+            elif input_str == "save":
+                saveFile(file)
 
-        file += input_char + "\n"
+            for char in input_str.codepoint_slices():
+                file.append(ord(char))
+            file.append(ord("\n"))
+        except e:
+            pass
 
 
-def loadFile(path: String) -> String:
-    if exists(path):
+fn loadFile(path: String) -> Optional[List[UInt8]]:
+    if not exists(path):
+        return
+
+    try:
         with open(path, "r") as f:
-            return f.read()
+            var contentArray: List[UInt8]
+            var contents: String = f.read()
 
-    return ""
+            for char in contents.codepoint_slices():
+                contentArray.append(ord(char))
+
+            return contentArray
+    except e:
+        print("Could not load specified file.", e)
 
 
-def saveFile(file: String):
-    with open("test.txt", "w") as f:
-        f.write(file)
+fn saveFile(file: List[UInt8]):
+    try:
+        var text: String = ""
+
+        for ascii in file:
+            text += chr(Int(ascii))
+
+        with open("test.txt", "w") as f:
+            f.write(text)
+    except e:
+        print("Unable to save file.")
