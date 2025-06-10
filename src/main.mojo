@@ -1,4 +1,5 @@
 import sys
+from os.path import exists
 
 var UP_ARROW = "\x1b[A"
 var DOWN_ARROW = "\x1b[B"
@@ -7,7 +8,7 @@ var LEFT_ARROW = "\x1b[D"
 
 
 def main():
-    file: String = ""
+    file: String = loadFile("test.txt")
 
     while True:
         print("\033[2J\033[H")  # Clear screen
@@ -19,6 +20,14 @@ def main():
             saveFile(file)
 
         file += input_char + "\n"
+
+
+def loadFile(path: String) -> String:
+    if exists(path):
+        with open(path, "r") as f:
+            return f.read()
+
+    return ""
 
 
 def saveFile(file: String):
