@@ -14,6 +14,7 @@ fn main():
         print("\033[2J\033[H")  # Clear screen
 
         try:
+            print(asciiToString(file))
             input_str = input(">")
             if input_str == "quit":
                 break
@@ -33,7 +34,7 @@ fn loadFile(path: String) -> Optional[List[UInt8]]:
 
     try:
         with open(path, "r") as f:
-            var contentArray: List[UInt8]
+            var contentArray: List[UInt8] = []
             var contents: String = f.read()
 
             for char in contents.codepoint_slices():
@@ -43,15 +44,21 @@ fn loadFile(path: String) -> Optional[List[UInt8]]:
     except e:
         print("Could not load specified file.", e)
 
+    return
+
 
 fn saveFile(file: List[UInt8]):
     try:
-        var text: String = ""
-
-        for ascii in file:
-            text += chr(Int(ascii))
-
         with open("test.txt", "w") as f:
-            f.write(text)
+            f.write(asciiToString(file))
     except e:
         print("Unable to save file.")
+
+
+fn asciiToString(asciiArr: List[UInt8]) -> String:
+    var text: String = ""
+
+    for ascii in asciiArr:
+        text += chr(Int(ascii))
+
+    return text
