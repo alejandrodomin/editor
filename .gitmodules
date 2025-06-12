@@ -1,0 +1,6 @@
+[submodule "banjo"]
+	path = banjo
+	url = https://github.com/thatstoasty/banjo.git
+[submodule "src/banjo"]
+	path = src/banjo
+	url = https://github.com/thatstoasty/banjo.git
