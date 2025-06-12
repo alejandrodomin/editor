@@ -1,6 +1,8 @@
 import sys
 from os.path import exists
 
+from fileio import *
+
 var UP_ARROW = "\x1b[A"
 var DOWN_ARROW = "\x1b[B"
 var RIGHT_ARROW = "\x1b[C"
@@ -16,49 +18,27 @@ fn main():
         try:
             print(asciiToString(file))
             input_str = input(">")
+
             if input_str == "quit":
                 break
             elif input_str == "save":
                 saveFile(file)
 
             for char in input_str.codepoint_slices():
-                file.append(ord(char))
+                if char == UP_ARROW:
+                    print("up arrow")
+                elif char == DOWN_ARROW:
+                    pass
+                elif char == RIGHT_ARROW:
+                    pass
+                elif char == LEFT_ARROW:
+                    pass
+                else:
+                    file.append(ord(char))
+
             file.append(ord("\n"))
         except e:
             pass
 
 
-fn loadFile(path: String) -> Optional[List[UInt8]]:
-    if not exists(path):
-        return
-
-    try:
-        with open(path, "r") as f:
-            var contentArray: List[UInt8] = []
-            var contents: String = f.read()
-
-            for char in contents.codepoint_slices():
-                contentArray.append(ord(char))
-
-            return contentArray
-    except e:
-        print("Could not load specified file.", e)
-
-    return
-
-
-fn saveFile(file: List[UInt8]):
-    try:
-        with open("test.txt", "w") as f:
-            f.write(asciiToString(file))
-    except e:
-        print("Unable to save file.")
-
-
-fn asciiToString(asciiArr: List[UInt8]) -> String:
-    var text: String = ""
-
-    for ascii in asciiArr:
-        text += chr(Int(ascii))
-
-    return text
+# fn handleCommands(text: String) -> Int:
